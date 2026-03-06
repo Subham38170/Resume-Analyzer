@@ -119,12 +119,12 @@ Inputs:
 Resume:
 {resume_text}
 
-Job Requirements:
-{skill_requirements}
+Job Description:
+{jd_data}
 
 Evaluation Rules (VERY IMPORTANT):
 
-1. Extract all required skills from the Job Requirements.
+1. Extract all required skills from the Job Description.
 2. Compare them with the skills mentioned in the Resume.
 3. Categorize them into:
    - Matched Skills
@@ -147,24 +147,31 @@ STRICT RULES:
 - Do NOT give high scores for unrelated resumes.
 
 Overall Score (0–10):
-Evaluate the overall suitability considering:
-- Skill relevance
-- Project relevance
-- Domain alignment
-- Experience level
+
+The overall score MUST be derived from the ATS score using this rule:
+
+ATS Score → Overall Score
+90–100 → 9–10
+80–89 → 8–9
+70–79 → 7–8
+60–69 → 6–7
+40–59 → 4–6
+20–39 → 2–4
+0–19 → 0–2
+
+IMPORTANT RULE:
+Overall score MUST logically match the ATS score.
 
 Return the output strictly in JSON format:
 
 {{
   "skills_res_score": "Explain reasoning in 3–4 short points including matched skills and missing skills, then give final skill match score out of 10.",
-  "overall_score": number,
-  "ats_score": number
+  "overall_score": 0,
+  "ats_score": 0
 }}
 
 Important:
-- ats_score must be a number between 0 and 100
+- ats_score must be between 0 and 100
 - overall_score must be between 0 and 10
 - Do NOT include any extra text outside JSON.
 """)
-
-

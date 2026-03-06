@@ -11,7 +11,7 @@ from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
 def calculate_ats_score(state: ResumeAnalysisState):
     resume_text = state['resume_text']
-    skill_requirements = state['skill_requirements']
+    skill_requirements = state['jd_data']
 
 
     parser = PydanticOutputParser(pydantic_object=SkillAnalysisModel)
@@ -22,7 +22,7 @@ def calculate_ats_score(state: ResumeAnalysisState):
     response = chain.invoke(
         {
             'resume_text' : resume_text,
-            'skill_requirements' : skill_requirements
+            'jd_data' : skill_requirements
         }
     )
 
