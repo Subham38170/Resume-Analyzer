@@ -110,68 +110,40 @@ Suggestions: Learn Docker through online tutorials; participate in cloud-based p
 
 
 ats_calc_prompt = ChatPromptTemplate.from_template("""
-You are a STRICT ATS (Applicant Tracking System) evaluator.
+You are a Senior Technical Recruiter and Expert ATS Optimizer. 
 
-Your job is to score how well the resume matches the job requirements.
+Your goal is to perform a high-fidelity match analysis between a candidate's Resume and a Job Description. 
 
 Inputs:
+Resume: {resume_text}
+Job Description: {jd_data}
 
-Resume:
-{resume_text}
+Evaluation Framework:
+1. Contextual Matching: Look beyond exact keyword matches. Recognize synonyms (e.g., "AWS" vs "Amazon Web Services") and transferable technical domains.
+2. Skill Categorization:
+   - Hard Skills: Technical tools, languages, and frameworks.
+   - Soft Skills/Domain: Leadership, methodology (Agile), and industry-specific knowledge.
+3. Gap Analysis: Identify what critical requirements are missing that would be deal-breakers.
 
-Job Description:
-{jd_data}
+Scoring Guidelines:
+- 85-100: Excellent match. The candidate has the core tech stack and relevant experience.
+- 70-84: Strong match. Has most core skills but lacks 1-2 secondary requirements.
+- 50-69: Potential match. Has the foundation but requires training in specific areas.
+- Below 50: Significant gaps in experience or tech stack.
 
-Evaluation Rules (VERY IMPORTANT):
-
-1. Extract all required skills from the Job Description.
-2. Compare them with the skills mentioned in the Resume.
-3. Categorize them into:
-   - Matched Skills
-   - Partially Matched Skills
-   - Missing Skills
-
-Scoring Logic:
-
-ATS Score (0–100):
-- 90–100 → Almost all required skills present
-- 70–89 → Many skills match but some missing
-- 40–69 → Only partial skill match
-- 10–39 → Very few skills match
-- 0–9 → Almost no skills match or completely unrelated
-
-STRICT RULES:
-- If the resume domain is completely different from the job description → ATS score must be below 20.
-- If less than 30% of required skills match → ATS score must be below 40.
-- If there are zero technical skill matches → ATS score must be 0–10.
-- Do NOT give high scores for unrelated resumes.
-
-Overall Score (0–10):
-
-The overall score MUST be derived from the ATS score using this rule:
-
-ATS Score → Overall Score
-90–100 → 9–10
-80–89 → 8–9
-70–79 → 7–8
-60–69 → 6–7
-40–59 → 4–6
-20–39 → 2–4
-0–19 → 0–2
-
-IMPORTANT RULE:
-Overall score MUST logically match the ATS score.
+Refined Scoring Rule:
+- If the domain is a total mismatch (e.g., Nurse applying for Java Dev), score 0-15.
+- If the candidate has the core tech stack but lacks specific niche tools, do NOT penalize heavily; score in the 75-85 range.
 
 Return the output strictly in JSON format:
-
 {{
-  "skills_res_score": "Explain reasoning in 3–4 short points including matched skills and missing skills, then give final skill match score out of 10.",
+  "skills_res_score": "Provide a nuanced 3-point summary: 1) Top strengths/matches, 2) Key missing gaps, 3) Cultural/Domain fit. End with a 1-10 rating.",
   "overall_score": 0,
   "ats_score": 0
 }}
 
-Important:
-- ats_score must be between 0 and 100
-- overall_score must be between 0 and 10
-- Do NOT include any extra text outside JSON.
+Important: 
+- The overall_score is (ats_score / 10).
+- Be objective but fair. Do not include any text outside the JSON block.
 """)
+
