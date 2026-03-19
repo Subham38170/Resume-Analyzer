@@ -22,7 +22,8 @@ def calculate_ats_score(state: ResumeAnalysisState):
     response = chain.invoke(
         {
             'resume_text' : resume_text,
-            'jd_data' : skill_requirements
+            'skill_requirements' : skill_requirements,
+            'format_instructions' : parser.get_format_instructions()
         }
     )
 

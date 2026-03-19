@@ -1,4 +1,3 @@
-
 from langchain_classic.prompts import ChatPromptTemplate
 
 skill_extraction_prompt_from_jd = ChatPromptTemplate.from_template("""
@@ -108,42 +107,106 @@ Suggestions: Learn Docker through online tutorials; participate in cloud-based p
 """)
 
 
-
 ats_calc_prompt = ChatPromptTemplate.from_template("""
-You are a Senior Technical Recruiter and Expert ATS Optimizer. 
+You are an intelligent Applicant Tracking System (ATS) used by recruiters.
 
-Your goal is to perform a high-fidelity match analysis between a candidate's Resume and a Job Description. 
+Your task is to evaluate how well a candidate's resume matches the job requirements.
 
-Inputs:
-Resume: {resume_text}
-Job Description: {jd_data}
+--------------------------------------------------
 
-Evaluation Framework:
-1. Contextual Matching: Look beyond exact keyword matches. Recognize synonyms (e.g., "AWS" vs "Amazon Web Services") and transferable technical domains.
-2. Skill Categorization:
-   - Hard Skills: Technical tools, languages, and frameworks.
-   - Soft Skills/Domain: Leadership, methodology (Agile), and industry-specific knowledge.
-3. Gap Analysis: Identify what critical requirements are missing that would be deal-breakers.
+RESUME
+{resume_text}
 
-Scoring Guidelines:
-- 85-100: Excellent match. The candidate has the core tech stack and relevant experience.
-- 70-84: Strong match. Has most core skills but lacks 1-2 secondary requirements.
-- 50-69: Potential match. Has the foundation but requires training in specific areas.
-- Below 50: Significant gaps in experience or tech stack.
+--------------------------------------------------
 
-Refined Scoring Rule:
-- If the domain is a total mismatch (e.g., Nurse applying for Java Dev), score 0-15.
-- If the candidate has the core tech stack but lacks specific niche tools, do NOT penalize heavily; score in the 75-85 range.
+JOB REQUIREMENTS
+{skill_requirements}
 
-Return the output strictly in JSON format:
-{{
-  "skills_res_score": "Provide a nuanced 3-point summary: 1) Top strengths/matches, 2) Key missing gaps, 3) Cultural/Domain fit. End with a 1-10 rating.",
-  "overall_score": 0,
-  "ats_score": 0
-}}
+--------------------------------------------------
 
-Important: 
-- The overall_score is (ats_score / 10).
-- Be objective but fair. Do not include any text outside the JSON block.
+STEP 1 — DOMAIN IDENTIFICATION
+
+Identify the primary professional domain of:
+
+1. The resume
+2. The job description
+
+Examples of domains:
+- Machine Learning
+- Data Science
+- Web Development
+- Chemistry Research
+- Physics Research
+- Marketing
+- Finance
+- Human Resources
+- Healthcare
+- Education
+
+If the domains are completely unrelated, the ATS score MUST be below 25.
+
+--------------------------------------------------
+
+STEP 2 — CATEGORY EVALUATION
+
+Evaluate the candidate across these universal hiring criteria.
+
+1. Domain Knowledge
+   How well the candidate's field matches the job field.
+
+2. Required Skills Match
+   How many required skills from the job description appear in the resume.
+
+3. Relevant Experience / Projects
+   Whether the candidate has practical work, research, or projects related to the role.
+
+4. Tools / Technologies
+   Whether the candidate has used relevant tools, software, or methodologies.
+
+5. Education / Certifications
+   Whether education or training supports the job role.
+
+6. Soft Skills & Collaboration
+   Communication, teamwork, leadership, research ability, etc.
+
+Score each category internally from 0 to 10.
+
+--------------------------------------------------
+
+STEP 3 — WEIGHTED ATS SCORE
+
+Calculate the final ATS score using these weights:
+
+Domain Knowledge → 25%  
+Required Skills Match → 25%  
+Relevant Experience → 20%  
+Tools / Technologies → 10%  
+Education / Certifications → 10%  
+Soft Skills → 10%
+
+Final ATS score must be between 0 and 100.
+
+Avoid round numbers like 60, 70, or 80.
+
+--------------------------------------------------
+
+STEP 4 — OVERALL SCORE
+
+overall_score = ats_score / 10
+
+--------------------------------------------------
+
+OUTPUT RULES
+
+Return ONLY valid JSON.
+
+Do NOT include explanations outside the JSON.
+
+Output format:
+
+{format_instructions}
 """)
+
+
+
 
