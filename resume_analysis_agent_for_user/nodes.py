@@ -3,7 +3,7 @@ from langchain_classic.output_parsers import PydanticOutputParser
 from langchain_core.output_parsers import StrOutputParser
 from .models import SkillAnalysisModel
 from .prompts import ats_calc_prompt,improvement_prompt,suggestion_prompt,skill_extraction_prompt_from_jd
-from ..llms import llm1,llm2,llm3
+from llms import llm1,llm2,llm3
 from langchain_community.document_loaders import PyPDFLoader,Docx2txtLoader
 
 

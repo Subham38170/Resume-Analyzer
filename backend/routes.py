@@ -6,7 +6,7 @@ from typing import List
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from .schema import ResumeAnalysisRequest,ResumeAnalysisResponseModel
-from ..resume_analysis_agent_for_user.agent import resume_analysis_agent
+from resume_analysis_agent_for_user.agent import resume_analysis_agent
 
 
 router = APIRouter()
